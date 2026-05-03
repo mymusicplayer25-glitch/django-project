@@ -1,0 +1,5 @@
+Django
+gunicorn
+whitenoise
+pillow
+django-simple-captcha
