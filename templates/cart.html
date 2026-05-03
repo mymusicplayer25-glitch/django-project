@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Cart</title>
+
+<style>
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#f8fafc; }
+
+.card {
+    background:white;
+    margin:15px;
+    padding:15px;
+    border-radius:10px;
+    box-shadow:0 3px 10px rgba(0,0,0,0.1);
+}
+
+button {
+    padding:5px 10px;
+    margin:3px;
+}
+
+.total {
+    font-size:22px;
+    text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<h2 style="text-align:center;">🛒 Your Cart</h2>
+
+{% for item in cart_items %}
+<div class="card">
+    <h3>{{ item.product.name }}</h3>
+
+    {% if item.product.image %}
+       <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">width="150">
+    {% endif %}
+
+    <p>₹{{ item.product.price }}</p>
+
+    <p>
+        <a href="/decrease/{{ item.id }}">➖</a>
+        {{ item.quantity }}
+        <a href="/increase/{{ item.id }}">➕</a>
+    </p>
+
+    <p>Total: ₹{{ item.total_price }}</p>
+
+    <a href="/remove/{{ item.id }}" style="color:red;">Remove</a>
+</div>
+{% endfor %}
+
+<div class="total">
+    Total: ₹{{ total }}
+</div>
+
+<a href="/shop/">⬅ Back to Shop</a>
+
+</body>
+</html>

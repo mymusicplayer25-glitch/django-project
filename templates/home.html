@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>MyStore</title>
+
+    <style>
+        body {
+            margin:0;
+            font-family: 'Segoe UI', sans-serif;
+            background:#f1f5f9;
+        }
+
+        .navbar {
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:15px 25px;
+            background:#0f172a;
+            color:white;
+        }
+
+        .navbar a {
+            color:white;
+            text-decoration:none;
+            margin-left:15px;
+        }
+
+        .badge {
+            background:red;
+            padding:2px 6px;
+            border-radius:50%;
+            font-size:12px;
+        }
+
+        .container {
+            display:grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px,1fr));
+            gap:20px;
+            padding:20px;
+        }
+
+        .card {
+            background:white;
+            border-radius:12px;
+            padding:15px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+            transition:0.2s;
+        }
+
+        .card:hover {
+            transform:translateY(-5px);
+        }
+
+        img {
+            width:100%;
+            height:180px;
+            object-fit:cover;
+            border-radius:10px;
+        }
+
+        .price {
+            color:#16a34a;
+            font-weight:bold;
+        }
+
+        button {
+            width:100%;
+            padding:10px;
+            border:none;
+            background:#3b82f6;
+            color:white;
+            border-radius:6px;
+            cursor:pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <div><b>🛒 MyStore</b></div>
+
+    <div>
+        {{ user.username }}
+        <a href="/cart/">
+    Cart 🛒 <span class="badge">3</span>
+</a>
+        <a href="/logout/">Logout</a>
+    </div>
+</div>
+
+<div class="container">
+{% for product in products %}
+    <div class="card">
+
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="product">
+        {% endif %}
+
+        <h3>{{ product.name }}</h3>
+        <p class="price">₹{{ product.price }}</p>
+        <p>{{ product.description }}</p>
+
+        <form action="/add/{{ product.id }}/" method="POST">
+            {% csrf_token %}
+            <button>Add to Cart</button>
+        </form>
+
+    </div>
+{% endfor %}
+</div>
+
+</body>
+</html>

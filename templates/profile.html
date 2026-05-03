@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Profile</title>
+</head>
+<body>
+
+<h2>My Profile</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button>Save</button>
+</form>
+
+</body>
+</html>
