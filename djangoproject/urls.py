@@ -4,7 +4,11 @@ from django.urls import path, include   # ✅ REQUIRED
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 urlpatterns = [
+    path('admin/', admin.site.urls),
+
+    path('', include('E_commerce.urls')),  # ✅ THIS LINE MUST EXIST
     path('admin/', admin.site.urls),
     path('', include('E_commerce.urls')),
     path('captcha/', include('captcha.urls')),  # ✅ ADD THIS

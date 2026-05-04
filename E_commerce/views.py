@@ -1,15 +1,54 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.models import User
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from .models import Product, Cart, UserProfile
 from .forms import RegisterForm, LoginForm, ProfileForm
+from django.contrib.auth.models import User
+from django.http import HttpResponse
+from .models import Order, OrderItem
 
 
+
+@login_required
+def checkout(request):
+    cart_items = Cart.objects.filter(user=request.user)
+
+    if request.method == "POST":
+        name = request.POST.get('name')
+        address = request.POST.get('address')
+        phone = request.POST.get('phone')
+
+        order = Order.objects.create(
+            user=request.user,
+            name=name,
+            address=address,
+            phone=phone
+        )
+
+        for item in cart_items:
+            OrderItem.objects.create(
+                order=order,
+                product=item.product,
+                quantity=item.quantity
+            )
+
+        cart_items.delete()  # clear cart
+
+        return redirect('home')
+
+    return render(request, 'checkout.html', {'cart_items': cart_items})
 # 🌐 Landing Page
+
 def landing(request):
     return render(request, 'landing.html')
+
+def create_admin(request):
+    if not User.objects.filter(username='admin').exists():
+        User.objects.create_superuser('admin', 'admin@gmail.com', 'admin123')
+        return HttpResponse("Admin created")
+    return HttpResponse("Admin already exists")
 
 
 # 🏠 Shop (Home Page)
